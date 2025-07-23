@@ -8,16 +8,43 @@ const SurveyForm = () => {
   const [feedback, setFeedback] = useState("");
   const [suggestion, setSuggestion] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Thank you for your feedback!");
-    setName("");
-    setSource("");
-    setClarify("");
-    setRating(3);
-    setFeedback("");
-    setSuggestion("");
+    const formData = {
+      name,
+      source,
+      clarify,
+      rating,
+      feedback,
+      suggestion,
+    };
+    try {
+      const response = await fetch("http://localhost:5000/api/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Something went wrong while submitting the form.");
+      }
+
+      alert("Thank you for your feedback!");
+      // Clear form
+      setName("");
+      setSource("");
+      setClarify("");
+      setRating(3);
+      setFeedback("");
+      setSuggestion("");
+    } catch (error) {
+      alert("Failed to submit feedback. Please try again later.");
+      console.error("Error submitting form:", error);
+    }
   };
+
 
   const handleRatingClick = (star) => {
     setRating((prev) => (prev === star ? 0 : star));
@@ -65,7 +92,7 @@ const SurveyForm = () => {
           <input
             id="name"
             type="text"
-            placeholder="Enter your full name"
+            placeholder="Enter your full name(Optional)"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="px-3 py-2 text-sm border border-[#D1D5DB] rounded-sm bg-white placeholder-[#9CA3AF] text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#C8102E] transition"
@@ -86,6 +113,7 @@ const SurveyForm = () => {
             onChange={(e) => setSource(e.target.value)}
             // disabled={source !== ""}
             className="px-3 py-2 text-sm border border-[#D1D5DB] rounded-sm bg-white text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#C8102E] transition"
+            required
           >
             <option value="" disabled>--Select--</option>
             <option value="social-media">Social Media</option>
@@ -154,6 +182,7 @@ const SurveyForm = () => {
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
             className="px-3 py-2 text-sm border border-[#D1D5DB] rounded-sm bg-white placeholder-[#9CA3AF] text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#C8102E] transition resize-none"
+            required
           />
         </div>
 
