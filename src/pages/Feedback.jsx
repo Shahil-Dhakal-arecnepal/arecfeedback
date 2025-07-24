@@ -1,29 +1,9 @@
 import React, { useEffect, useState } from "react";
+import axios from 'axios';
 
 const Feedback = () => {
-  const [feedbacks] = useState([
-    {
-      id: 1,
-      name: "Test Student 1",
-      source: "social-media",
-      clarify: "",
-      rating: 4,
-      feedback: "The office staff was very helpful and courteous.",
-      suggestion: "More seating in the waiting area.",
-      submittedAt: "2025-06-28 12:00",
-    },
-    {
-      id: 2,
-      name: "Test Student 2",
-      source: "event",
-      clarify: "",
-      rating: 2,
-      feedback: "It was okay.",
-      suggestion: "improve facility",
-      submittedAt: "2025-06-29 09:15",
-    },
-    // add more entries with unique IDs
-  ]);
+
+  const [feedbacks, setFeedbacks] = useState([]);
 
   const [selectedFeedback, setSelectedFeedback] = useState(null);
 
@@ -34,6 +14,19 @@ const Feedback = () => {
     event: "Events",
     other: "Others",
   };
+
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/feedback");
+        setFeedbacks(response.data);
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
+    };
+
+    fetchFeedbacks();
+  }, []);
 
   const closeModal = () => setSelectedFeedback(null);
 

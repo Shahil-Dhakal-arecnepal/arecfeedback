@@ -19,7 +19,7 @@ const Topbar = () => {
           Shahil Dhakal
         </span>
         <img
-          src="admin.png"
+          src="/admin.png"
           alt="Admin Profile"
           className="w-10 h-10 rounded-full"
         />
